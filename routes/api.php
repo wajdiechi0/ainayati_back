@@ -20,9 +20,9 @@ Route::post('registerDoctor', 'API\UserController@registerDoctor');
 Route::post('registerNurse', 'API\UserController@registerNurse');
 Route::post('registerPatient', 'API\UserController@registerPatient');
 
-Route::group([    
-    'middleware' => 'auth:api', 
-], function () {    
+Route::group([
+    'middleware' => 'auth:api',
+], function () {
     Route::post('addNewActivity', 'API\HealthController@addNewActivity');
     Route::post('addNewHeartRate', 'API\HealthController@addNewHeartRate');
     
@@ -30,16 +30,16 @@ Route::group([
     Route::get('nurseList', 'API\UserController@getNurseList');
     Route::get('doctorList', 'API\UserController@getDoctorList');
     Route::get('patientList', 'API\UserController@getPatientList');
-    Route::post('removeUser', 'API\UserController@removeUser');
+    Route::delete('removeUser', 'API\UserController@removeUser');
     Route::get('getProfileInfo', 'API\UserController@getProfileInfo');
     Route::post('updateProfile', 'API\UserController@updateProfile');
     Route::post('updatePassword', 'API\UserController@updatePassword');
 });
 
-Route::group([    
-    'namespace' => 'Auth',    
+Route::group([
+    'namespace' => 'Auth',
     'prefix' => 'password'
-], function () {    
+], function () {
     Route::post('create', 'PasswordResetController@create');
     Route::post('reset/', 'PasswordResetController@reset');
 });

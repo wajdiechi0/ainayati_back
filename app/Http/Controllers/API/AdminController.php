@@ -36,26 +36,26 @@ public $successStatus = 200;
             'c_password' => 'required|same:password',
         ]);
         if ($validator->fails()) {
-                    return response()->json(['code'=>'02','status'=>'401','data'=>$validator->errors()], 200);
+                    return response()->json(['code'=>'02','status'=>'401','data'=>$validator->errors(), 'message'=> 'Please check your entries !'], 200);
                 }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         try{
             $user = User::create($input);
         }catch(\Exception $e){
-            return response()->json(['code'=>'03','status'=>'500','data'=>$e->errorInfo[2]], 200);
+            return response()->json(['code'=>'03','status'=>'500','data'=>$e->errorInfo[2], 'message'=> 'Email already exists'], 200);
 
         }        
         $userRole = UserRole::create(['id_user'=>$user->id,'id_role'=>2]);
         $success=$user;
         $success['token'] =  $user->createToken('ainayati')-> accessToken;
-        return response()->json(['code'=>'0','status'=>'200','data'=>$success], 200);
+        return response()->json(['code'=>'0','status'=>'200','data'=>$success, 'message'=> 'You have successfully added a new patient'], 200);
     }
 
     public function getAdminList(Request $request)
     {
         $users = User::join('user_roles', 'users.id', '=', 'user_roles.id_user')
-                ->select(['users.id','users.email'])
+                ->select(['users.id','users.email','users.name'])
                 ->where('user_roles.id_role','=',2)
                 ->get();
         if ($users) {
