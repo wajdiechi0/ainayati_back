@@ -29,8 +29,17 @@ Route::group([
     Route::get('adminList', 'API\AdminController@getAdminList');
     Route::get('nurseList', 'API\UserController@getNurseList');
     Route::get('doctorList', 'API\UserController@getDoctorList');
+    Route::get('fetchDoctorListBySpecialty', 'API\UserController@doctorListBySpecialty');
+    Route::post('affectDoctorPatient', 'API\UserController@affectDoctorPatient');
+    Route::post('sendAffectRequest', 'API\UserController@sendAffectRequest');
+    Route::get('fetchAffectRequests', 'API\UserController@fetchAffectRequests');
+    Route::post('acceptAffectRequest', 'API\UserController@acceptAffectRequest');
+    Route::post('denyAffectRequest', 'API\UserController@denyAffectRequest');
     Route::get('patientList', 'API\UserController@getPatientList');
+    Route::get('doctorPatientList', 'API\UserController@getDoctorPatientList');
+    Route::get('patientDoctorList', 'API\UserController@getPatientDoctorList');
     Route::delete('removeUser', 'API\UserController@removeUser');
+    Route::delete('removeAffect', 'API\UserController@removeAffect');
     Route::get('getProfileInfo', 'API\UserController@getProfileInfo');
     Route::post('updateProfile', 'API\UserController@updateProfile');
     Route::post('updatePassword', 'API\UserController@updatePassword');
