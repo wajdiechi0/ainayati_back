@@ -25,11 +25,14 @@ Route::group([
 ], function () {
     Route::post('addNewActivity', 'API\HealthController@addNewActivity');
     Route::post('addNewHeartRate', 'API\HealthController@addNewHeartRate');
+    Route::get('fetchPatientActivities', 'API\HealthController@fetchPatientActivities');
+    Route::get('fetchPatientHeartRates', 'API\HealthController@fetchPatientHeartRates');
     
     Route::get('adminList', 'API\AdminController@getAdminList');
     Route::get('nurseList', 'API\UserController@getNurseList');
     Route::get('doctorList', 'API\UserController@getDoctorList');
     Route::get('getLast24HoursUsers', 'API\UserController@getLast24HoursUsers');
+    Route::get('registrationsPerMonth', 'API\UserController@registrationsPerMonth');
     Route::get('fetchDoctorListBySpecialty', 'API\UserController@doctorListBySpecialty');
     Route::post('affectDoctorPatient', 'API\UserController@affectDoctorPatient');
     Route::post('sendAffectRequest', 'API\UserController@sendAffectRequest');

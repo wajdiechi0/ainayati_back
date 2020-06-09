@@ -69,4 +69,58 @@ class HealthController extends Controller
             'data' => $heartRate,
         ], 200);
     }
+
+    public function fetchPatientActivities(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['code' => '02', 'status' => '401', 'data' => $validator->errors(), 'message'=> 'Please check your entries !'], 200);
+        }
+        $patient = User::where('email', '=', request('email'))
+                ->first();
+        if (!$patient) {
+            return response()->json([
+                        'code' => '04',
+                        'status' => '404',
+                        'data' => [],
+                        'message' => "Patient not found"
+                    ], 200);
+        }
+        $activities = Activity::where('user_email', '=', request('email'))
+                ->get();
+        return response()->json([
+                'code' => '0',
+                'status' => '200',
+                'data' => $activities,
+            ], 200);
+    }
+
+    public function fetchPatientHeartRates(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['code' => '02', 'status' => '401', 'data' => $validator->errors(), 'message'=> 'Please check your entries !'], 200);
+        }
+        $patient = User::where('email', '=', request('email'))
+                ->first();
+        if (!$patient) {
+            return response()->json([
+                        'code' => '04',
+                        'status' => '404',
+                        'data' => [],
+                        'message' => "Patient not found"
+                    ], 200);
+        }
+        $heartRates = HeartRate::where('user_email', '=', request('email'))
+                ->get();
+        return response()->json([
+                'code' => '0',
+                'status' => '200',
+                'data' => $heartRates,
+            ], 200);
+    }
 }

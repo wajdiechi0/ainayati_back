@@ -15,11 +15,10 @@ class CreateHeartRatesTable extends Migration
     {
         Schema::create('heart_rates', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->float('heart_rate',10,2);
+            $table->float('heart_rate', 10, 2);
             $table->string('date_time');
             $table->timestamps();
-            $table->bigInteger('id_user')->unsigned();
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->string('user_email');
         });
     }
 

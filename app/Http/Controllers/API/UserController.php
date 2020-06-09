@@ -190,11 +190,14 @@ class UserController extends Controller
                 'code' => '04',
                 'status' => '404',
                 'data' => [],
-                'message' => "Doctor not found !"
+                'message' => "User not found !"
             ], 200);
         }
 
         foreach ($request->all() as $key => $value) {
+            if ($value=="") {
+                $value = " ";
+            }
             $user[$key] = $value;
         }
         $user->save();
@@ -241,7 +244,8 @@ class UserController extends Controller
     public function getPatientList(Request $request)
     {
         $users = User::join('user_roles', 'users.id', '=', 'user_roles.id_user')
-                ->select(['users.id','users.name','users.email','users.birthdate','users.home_address','users.description','users.height','users.weight','users.gender'])
+                ->join('affect_doctor_patients', 'users.id', '=', 'affect_doctor_patients.id_patient')
+                ->select(['users.id','users.name','users.email','users.birthdate','users.home_address','users.description','users.height','users.weight','users.gender','affect_doctor_patients.id_doctor'])
                 ->where('user_roles.id_role', '=', 5)
                 ->get();
         if ($users) {
@@ -1187,5 +1191,38 @@ class UserController extends Controller
         } else {
             return response()->json(['code' => '04', 'status' => '200', 'data' => 'No users found'], 200);
         }
+    }
+
+    public function registrationsPerMonth(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'type' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['code' => '02', 'status' => '401', 'data' => $validator->errors(), 'message'=> 'Please check your entries !'], 200);
+        }
+        $users = User::join('user_roles', 'users.id', '=', 'user_roles.id_user')
+                ->select(['users.id','users.name','users.email','users.birthdate','users.home_address','users.description','users.height','users.weight','users.gender'])
+                ->where('user_roles.id_role', '=', request('type'))
+                ->get();
+        $regisrations =[];
+        for ($i = 1 ; $i < 13 ; $i++) {
+            $usersCount = User::join('user_roles', 'users.id', '=', 'user_roles.id_user')
+                ->select(['users.id','users.name','users.email','users.birthdate','users.home_address','users.description','users.height','users.weight','users.gender'])
+                ->where('user_roles.id_role', '=', request('type'))
+                ->whereMonth(
+                    'users.created_at',
+                    $i
+                )->whereYear(
+                    'users.created_at',
+                    Carbon::now()->format('Y')
+                )->count();
+            $regisrations[$i-1] = $usersCount;
+        }
+        return response()->json([
+                'code' => '0',
+                'status' => '200',
+                'data' => $regisrations
+            ], 200);
     }
 }

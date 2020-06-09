@@ -17,11 +17,10 @@ class CreateActivitiesTable extends Migration
             $table->bigIncrements('id');
             $table->string('type');
             $table->bigInteger('distance');
-            $table->float('speed',10,2);
-            $table->string('date');
-            $table->integer('duration');
-            $table->bigInteger('id_user')->unsigned();
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->float('speed', 10, 2);
+            $table->string('date_time');
+            $table->float('duration', 10, 2);
+            $table->string('user_email');
             $table->timestamps();
         });
     }
