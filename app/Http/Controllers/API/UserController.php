@@ -1201,10 +1201,6 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['code' => '02', 'status' => '401', 'data' => $validator->errors(), 'message'=> 'Please check your entries !'], 200);
         }
-        $users = User::join('user_roles', 'users.id', '=', 'user_roles.id_user')
-                ->select(['users.id','users.name','users.email','users.birthdate','users.home_address','users.description','users.height','users.weight','users.gender'])
-                ->where('user_roles.id_role', '=', request('type'))
-                ->get();
         $regisrations =[];
         for ($i = 1 ; $i < 13 ; $i++) {
             $usersCount = User::join('user_roles', 'users.id', '=', 'user_roles.id_user')
